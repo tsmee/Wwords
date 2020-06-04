@@ -1,3 +1,4 @@
+import json
 from anytree import NodeMixin, Resolver, ChildResolverError
 
 
@@ -11,6 +12,8 @@ class NewNode(NodeMixin):
 
 
 class Storage(NodeMixin):
+
+    _model_ver = '0.1'
 
     _TRNSL = {"а": "a", "е": "e",
               "ё": "yo", "и": "i",
@@ -45,6 +48,22 @@ class Storage(NodeMixin):
             NewNode(vow_str, self.get_node(pos_str))
 
         return self.get_node(pos_str+"/"+vow_str)
+
+    def export(self):
+        exp_model = {}
+        exp_model['version'] = self._model_ver
+        exp_model['name'] = self.name
+        exp_lines = []
+        for i in self.leaves:
+            id = "id" + str(abs(hash(i.text)))
+            exp_lines.append(i.generate_export(id))
+        exp_model['lines'] = exp_lines
+        json_name = "model_" + self.name +".json"
+        with open(json_name, 'w', encoding='utf-8') as f:
+            json.dump(exp_model, f, ensure_ascii=False, indent=4)
+
+
+
 
 
 

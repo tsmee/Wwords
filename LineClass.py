@@ -31,7 +31,7 @@ class Line(NodeMixin, AbstractLine):
 
         self.text = text
         self.words = words
-        # self.words = re.sub('\?|\.|\,|\!|\/|\;|\:', '', line).split()
+        self.words_normal = []
         self.accents = accents
         self.acc_scheme = acc_scheme
         self.rhyme_params = {}
@@ -45,21 +45,33 @@ class Line(NodeMixin, AbstractLine):
             post = self.text[self.accents[-1] + 1]
         self.rhyme_params['post'] = post
         self.rhyme_params['pre'] = self.text[self.accents[-1] - 1]
+        morph = pymorphy2.MorphAnalyzer()
+        for i in self.words:
+            self.words_normal.append(morph.parse(i)[0].normal_form)
 
+    def generate_export(self, id):
+        exp = {}
+        exp['id'] = id
+        exp['text'] = self.text
+        signature = ""
+        for n in self.acc_scheme:
+            signature+=str(n)
+        exp['signature'] = signature
+        accent1 = {}
+        accent1['slog'] = self.accents[-1]
+        accent1['l_acc'] = self.rhyme_params["wovel"]
+        accent1['l_before'] = self.rhyme_params["pre"]
+        accent1['l_after'] = self.rhyme_params["post"]
+        exp['accents'] = [accent1]
+        exp_words = []
+        for i in range(len(self.words)):
+            exp_word = {}
+            exp_word["word_str"] = self.words[i]
+            exp_word["word_normal"] = self.words_normal[i]
+            exp_words.append(exp_word)
+        exp["words"] = exp_words
+        return exp
 
-
-#
-#
-# l = Line("подвернувшийся журнал")
-# l.accents = [4, 19]
-# l.acc_scheme = [0, 1, 0, 0, 0, 0, 1]
-# p = l.new_rhyme_params()
-#
-# l2 = Line("из своей квартиры и")
-# l2.accents = [6, 14]
-# l2.acc_scheme = [0, 0, 1, 0, 1, 0, 0]
-# p = l2.new_rhyme_params()
-# print(p)
 
 
 

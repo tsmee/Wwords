@@ -1,9 +1,6 @@
 import re
-
 from text import text
 import simplejson
-
-#
 
 
 class Data:
@@ -83,10 +80,7 @@ class Data:
         self.lines_ready = a
 
 
-# d = Data()
-# d.prepare_lines()
-# d.get_accent()
-# d.save_to_file()
+
 
 
 

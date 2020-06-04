@@ -6,6 +6,7 @@ import re
 import pymorphy2
 from random import choices
 from itertools import combinations
+
 """
 from ActionClass import Action
 s = Storage('dug')
@@ -72,9 +73,3 @@ class Action:
 
 
 
-
-s = Storage('dug')
-a = Action(s)
-a.prepare_data()
-a.save_lines()
-print(a.ready_lines)
