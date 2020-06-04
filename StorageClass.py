@@ -12,7 +12,10 @@ class NewNode(NodeMixin):
 
 class Storage(NodeMixin):
 
-    _TRNSL = {"a": "a", "е": "e", "о": "o", "у": "u"}
+    _TRNSL = {"а": "a", "е": "e",
+              "ё": "yo", "и": "i",
+              "о": "o", "у": "u", "ы": "uu",
+              "э": "ae", "ю": "yu", "я": "ya"}
 
     def __init__(self, name, parent=None, children=None):
         super(Storage, self).__init__()
@@ -29,7 +32,7 @@ class Storage(NodeMixin):
 
     def check_path(self, pos, vow):
         pos_str = "pos" + str(pos)
-        vow_str = self._TRNSL.get(vow, "a")
+        vow_str = self._TRNSL.get(vow, "error")
         try:
             self.get_node(pos_str)
 
@@ -46,8 +49,6 @@ class Storage(NodeMixin):
 
 
 
-# d = Storage("dug")
-# NewNode("pos0", d)
 
 
 
